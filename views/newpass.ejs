@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #faf6f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .reset-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+        h1 {
+            color: #1f2937;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .icon {
+            margin-right: 10px;
+            color: #6b7280;
+        }
+        .reset-btn {
+            background-color: #f9a826;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .reset-btn:hover {
+            background-color: #f59e0b;
+        }
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #6b7280;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .underline {
+            height: 3px;
+            width: 60px;
+            background-color: #f9a826;
+            margin: 0 auto;
+            margin-top: -20px;
+            margin-bottom: 30px;
+        }
+        .error-message {
+            color: #ef4444;
+            margin-top: 10px;
+            display: none;
+        }
+        .success-message {
+            color: #10b981;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="reset-container">
+        <h1>Reset Password</h1>
+        <div class="underline"></div>
+        
+        <form id="resetForm">
+            <div class="input-group">
+                <label for="username">
+                    <span class="icon">👤</span> Username
+                </label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="newPassword">
+                    <span class="icon">🔒</span> New Password
+                </label>
+                <input type="password" id="newPassword" name="newPassword" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="confirmPassword">
+                    <span class="icon">🔒</span> Confirm Password
+                </label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            
+            <button type="submit" class="reset-btn">Reset Password</button>
+        </form>
+        
+        <div id="errorMessage" class="error-message">
+            Passwords don't match or invalid username.
+        </div>
+        
+        <div id="successMessage" class="success-message">
+            Password reset successfully!
+        </div>
+        
+        <a href="login.html" class="back-link">Back to Login</a>
+    </div>
+
+    <script>
+        document.getElementById('resetForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Reset messages
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            // Validate passwords match
+            if (newPassword !== confirmPassword) {
+                errorMessage.textContent = "Passwords don't match!";
+                errorMessage.style.display = 'block';
+                return;
+            }
+            
+            // Send password reset request to server
+            fetch('/reset-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    newPassword: newPassword
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Reset failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                successMessage.style.display = 'block';
+                document.getElementById('resetForm').reset();
+                // Redirect to login page after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            })
+            .catch(error => {
+                errorMessage.textContent = "Failed to reset password. Please check your username.";
+                errorMessage.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>

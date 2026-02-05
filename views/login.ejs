@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= locals.title || 'Login Page' %></title>
+   <style>
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideInFromTop {
+        from { 
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to { 
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes scaleIn {
+        from { 
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        to { 
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+            
+    body {
+        background: linear-gradient(135deg, hsl(24, 44%, 95%) 0%, hsl(24, 44%, 89%) 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        line-height: 1.6;
+        position: relative;
+        overflow-x: hidden;
+        animation: fadeIn 1s ease forwards;
+    }
+
+    /* Background elements */
+    .background-elements {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    .circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(228, 156, 83, 0.1);
+        animation: float 15s infinite ease-in-out;
+    }
+
+    .circle:nth-child(1) {
+        width: 300px;
+        height: 300px;
+        top: -150px;
+        left: -100px;
+        animation-delay: 0s;
+    }
+
+    .circle:nth-child(2) {
+        width: 200px;
+        height: 200px;
+        bottom: -50px;
+        right: 100px;
+        animation-delay: 2s;
+    }
+
+    .circle:nth-child(3) {
+        width: 150px;
+        height: 150px;
+        bottom: 150px;
+        left: 10%;
+        animation-delay: 4s;
+    }
+
+    .decoration {
+        position: absolute;
+        font-size: 40px;
+        opacity: 0.15;
+        animation: grow 5s infinite ease-in-out;
+    }
+
+    .decoration:nth-child(4) {
+        top: 10%;
+        right: 15%;
+        animation-delay: 1s;
+    }
+
+    .decoration:nth-child(5) {
+        bottom: 15%;
+        left: 10%;
+        animation-delay: 3s;
+    }
+
+    .decoration:nth-child(6) {
+        top: 20%;
+        left: 15%;
+        animation-delay: 2s;
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0) rotate(0deg);
+        }
+        50% {
+            transform: translateY(30px) rotate(10deg);
+        }
+    }
+
+    @keyframes grow {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.2);
+        }
+    }
+
+    .login-box {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        transform: translateY(20px);
+        opacity: 0;
+        animation: fadeIn 0.8s forwards ease-out;
+        transition: all 0.5s ease;
+    }
+
+    .login-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Shimmering effect on login box */
+    .login-box::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        transform: rotate(30deg);
+        animation: shimmer 6s infinite linear;
+        pointer-events: none;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%) rotate(30deg); }
+        100% { transform: translateX(100%) rotate(30deg); }
+    }
+
+    h2 {
+        margin-bottom: 1.5rem;
+        color: #1e293b;
+        font-size: 1.75rem;
+        text-align: center;
+        position: relative;
+        padding-bottom: 0.5rem;
+        animation: slideInFromTop 0.8s ease-out forwards;
+        animation-delay: 0.3s;
+        opacity: 0;
+    }
+
+    h2::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background: hsl(32, 100%, 59%);
+        border-radius: 3px;
+    }
+
+    .textbox {
+        margin-bottom: 1.25rem;
+        position: relative;
+        overflow: hidden;
+        animation: slideInFromTop 0.5s ease-out forwards;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .textbox:nth-of-type(1) {
+        animation-delay: 0.5s;
+    }
+
+    .textbox:nth-of-type(2) {
+        animation-delay: 0.7s;
+    }
+
+    .textbox input {
+        width: 100%;
+        padding: 0.85rem 1rem 0.85rem 2.5rem;
+        font-size: 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .textbox input:focus {
+        border-color: hsl(32, 100%, 59%);
+        box-shadow: 0 0 0 3px hsla(32, 100%, 59%, 0.2);
+        outline: none;
+    }
+
+    /* Toggle password visibility */
+    .toggle-password {
+        position: absolute;
+        right: 0.8rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748b;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .toggle-password:hover {
+        color: hsl(32, 100%, 59%);
+    }
+
+    /* Input icons */
+    .textbox i {
+        position: absolute;
+        left: 0.8rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748b;
+        transition: color 0.3s ease;
+    }
+
+    .textbox input:focus + i {
+        color: hsl(32, 100%, 59%);
+    }
+
+    /* Input focus animation */
+    .textbox::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: hsl(32, 100%, 59%);
+        transition: width 0.3s ease;
+    }
+
+    .textbox input:focus ~ ::after {
+        width: 100%;
+    }
+
+    .remember-me {
+        margin-bottom: 1.25rem;
+        text-align: left;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        animation: fadeIn 0.5s ease-out forwards;
+        animation-delay: 0.9s;
+        opacity: 0;
+    }
+
+    .remember-me input {
+        margin-right: 0.5rem;
+        cursor: pointer;
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 0.85rem;
+        background: hsl(32, 100%, 59%);
+        color: white;
+        border: 1px solid transparent;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 1.25rem;
+        position: relative;
+        overflow: hidden;
+        animation: fadeIn 0.5s ease-out forwards, slideInFromTop 0.5s ease-out forwards;
+        animation-delay: 1.1s;
+        opacity: 0;
+    }
+
+    .btn-login:hover {
+        background: white;
+        color: hsl(32, 100%, 59%);
+        border: 1px solid hsl(32, 100%, 59%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Button shine effect */
+    .btn-login::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent
+        );
+        transition: left 0.7s ease;
+    }
+
+    .btn-login:hover::before {
+        left: 100%;
+    }
+
+    .forgot-password {
+        font-size: 0.9rem;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        animation: fadeIn 0.5s ease-out forwards;
+        animation-delay: 1.3s;
+    }
+
+    .forgot-password:hover {
+        opacity: 1;
+    }
+
+    .forgot-password a {
+        color: black;
+        text-decoration: none;
+        position: relative;
+    }
+
+    .forgot-password a::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: hsl(32, 100%, 59%);
+        transition: width 0.3s ease;
+    }
+
+    .forgot-password a:hover::after {
+        width: 100%;
+    }
+
+    /* Shake animation for invalid input */
+    @keyframes shake {
+        0%, 100% {transform: translateX(0);}
+        10%, 30%, 50%, 70%, 90% {transform: translateX(-10px);}
+        20%, 40%, 60%, 80% {transform: translateX(10px);}
+    }
+
+    input:invalid:focus {
+        animation: shake 0.5s ease-in-out;
+        border-color: #e53e3e;
+    }
+
+    /* Pulse animation for button */
+    @keyframes pulse {
+        0% {box-shadow: 0 0 0 0 hsla(32, 100%, 59%, 0.4);}
+        70% {box-shadow: 0 0 0 10px hsla(32, 100%, 59%, 0);}
+        100% {box-shadow: 0 0 0 0 hsla(32, 100%, 59%, 0);}
+    }
+
+    .btn-login:active {
+        animation: pulse 0.3s ease-in-out;
+        transform: scale(0.95);
+    }
+
+    /* Animation for button press */
+    @keyframes buttonPress {
+        0% { transform: scale(1); }
+        50% { transform: scale(0.95); }
+        100% { transform: scale(1); }
+    }
+
+    .pressed {
+        animation: buttonPress 0.3s forwards;
+    }
+
+    /* Loading animation for success */
+    .loader {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        margin: 20px auto;
+        border: 4px solid hsla(32, 100%, 59%, 0.2);
+        border-radius: 50%;
+        border-top-color: hsl(32, 100%, 59%);
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+   </style>
+</head>
+<body>
+    <div class="background-elements">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="decoration">✨</div>
+        <div class="decoration">🔑</div>
+        <div class="decoration">🔐</div>
+    </div>
+
+    <div class="login-box" id="loginBox">
+        <h2><%= locals.heading || 'Login Page' %></h2>
+        <form id="loginForm" action="<%= locals.formAction || '/login' %>" method="<%= locals.formMethod || 'POST' %>">
+            <div class="textbox">
+                <input type="text" placeholder="<%= locals.usernamePlaceholder || 'Username' %>" name="username" id="username" required>
+                <i>👤</i>
+            </div>
+            <div class="textbox">
+                <input type="password" placeholder="<%= locals.passwordPlaceholder || 'Password' %>" name="password" id="password" required>
+                <i>🔒</i>
+                <span class="toggle-password" onclick="togglePassword()">👁️</span>
+            </div>
+            <div class="remember-me">
+                <input type="checkbox" id="remember-me" name="remember" <% if(locals.rememberChecked) { %>checked<% } %>>
+                <label for="remember-me"><%= locals.rememberLabel || 'Remember me' %></label>
+            </div>
+            <button type="submit" class="btn-login" id="loginBtn"><%= locals.loginButtonText || 'Login' %></button>
+            <% if(locals.showForgotPassword !== false) { %>
+            <div class="forgot-password">
+                <a href="<%= locals.forgotPasswordLink || '/forgot-password' %>"><%= locals.forgotPasswordText || 'Forgot Password?' %></a>
+            </div>
+            <% } %>
+        </form>
+    </div>
+
+    <script>
+        // Function to toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleBtn = document.querySelector('.toggle-password');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = '🔒'; // Change to locked icon when password is visible
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = '👁️'; // Change back to eye icon when password is hidden
+            }
+        }
+        
+        // Button press animation
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            this.classList.add('pressed');
+            setTimeout(() => {
+                this.classList.remove('pressed');
+            }, 300);
+        });
+    </script>
+</body>
+</html>

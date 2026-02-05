@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+         :root {
+            --primary-color: #ff6b00;
+            --secondary-color: #ff8b38;
+            --background-color: #fff4e6;
+            --text-color: #333333;
+            --card-background: #ffffff;
+        }
+        body {
+             font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--background-color) 0%, #ffe5cc 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.6;
+            color: var(--text-color);
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            animation: fadeIn 0.7s ease-out;
+        }
+        h1 {
+            color: #4a4a4a;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        h1 span {
+            margin-right: 15px;
+        }
+        .summary {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        .summary h2 {
+            color: #b98138;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        .summary ul {
+            list-style-type: none;
+        }
+        .summary ul li {
+            margin-bottom: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #eaeaea;
+        }
+        .summary ul li:last-child {
+            border-bottom: none;
+        }
+        .summary ul li strong {
+            color: #2c3e50;
+            display: inline-block;
+            width: 100px;
+        }
+        .back-link {
+            display: inline-block;
+            text-decoration: none;
+            color: #db9834;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: #e4bc42;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span>🎉</span>Thank You for Your Order!</h1>
+        <p>Your order has been placed successfully.</p>
+        
+        <div class="summary">
+            <h2>Order Details</h2>
+            <ul>
+                <li><strong>Name:</strong> <%= firstName %> <%= lastName %></li>
+                <li><strong>Email:</strong> <%= email %></li>
+                <li><strong>Phone:</strong> <%= phone %></li>
+                <li><strong>Address:</strong> <%= address %>, <%= city %>, <%= zip %>, <%= country %></li>
+            </ul>
+        </div>
+        
+        <a href="/index" class="back-link">← Back to Home</a>
+    </div>
+</body>
+</html>
